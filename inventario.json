@@ -20,5 +20,16 @@
             "nombre": "TechZone",
             "contacto": "ventas@techzone.com"
         }
+    },
+    {
+        "codigo": "P003",
+        "nombre": "adios",
+        "precio": 10.0,
+        "stock": 10,
+        "proveedor": {
+            "codigo": "PR03",
+            "nombre": "gfnuj",
+            "contacto": "erndu"
+        }
     }
 ]

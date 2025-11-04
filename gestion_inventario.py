@@ -98,7 +98,7 @@ class Inventario:
             "contacto": i.proveedor.contacto
         }}
                 datos.append(diccionario)
-            json.dump(diccionario, fichero ,indent= 4)
+            json.dump(datos, fichero ,indent= 4, ensure_ascii=False)
         pass
 
     def anadir_producto(self, producto):
@@ -108,7 +108,7 @@ class Inventario:
         # TODO: comprobar si el código ya existe y, si no, añadirlo
         encontrado = False
         for i in self.productos:
-            if i.codigo == producto.codigo:
+            if i.codigo.lower() == producto.codigo.lower():
                 encontrado = True
                 break
         if encontrado == False:
@@ -131,7 +131,7 @@ class Inventario:
         Devuelve el producto con el código indicado, o None si no existe.
         """
         # TODO: buscar un producto por código
-        codigo_buscar = [i for i in self.productos if i.codigo == codigo]
+        codigo_buscar = [i for i in self.productos if i.codigo.lower() == codigo.lower()]
         if codigo_buscar:
             return codigo_buscar[0]
         return None
@@ -159,7 +159,7 @@ class Inventario:
         """
         # TODO: eliminar el producto de la lista
         for indice, producto in enumerate(self.productos):
-            if codigo == producto.codigo:
+            if codigo.lower() == producto.codigo.lower():
                 del(self.productos[indice])
                 print("Producto Eliminado")
                 break
@@ -181,7 +181,7 @@ class Inventario:
         Si no existen productos de ese proveedor, mostrar un mensaje.
         """
         # TODO: filtrar y mostrar los productos de un proveedor concreto
-        lista = [i for i in self.productos if i.proveedor.nombre == nombre_proveedor]
+        lista = [i for i in self.productos if i.proveedor.nombre.lower() == nombre_proveedor.lower()]
         if lista:
             for i in lista:
                 print(i)
@@ -208,44 +208,50 @@ def main():
         print("7. Mostrar productos de un proveedor")
         print("8. Guardar y salir")
 
-        opcion = int(input("Seleccione una opción: "))
-        
-        if opcion == 1:
-            codigo = input("Codigo: ")
-            nombre = input("Nombre: ")
-            precio = float(input("Precio: "))
-            stock = int(input("Stock: "))
-            codigo_proveedor = input("Codigo Proveedor: ")
-            nombre_proveedor = input("Nombre Proveedor: ")
-            contacto = input("Contacto: ")
+        try:
+            opcion = int(input("Seleccione una opción: "))
             
-            oInventario.anadir_producto(Producto(codigo, nombre, precio, stock, Proveedor(codigo_proveedor, nombre_proveedor, contacto)))
-        elif opcion == 2:
-            oInventario.mostrar()
-        elif opcion == 3:
-            codigo = input("Introduzca el codigo a buscar: ")
-            producto = oInventario.buscar(codigo)
-            if producto:
-                print(producto)
+            if opcion == 1:
+                codigo = input("Codigo: ")
+                nombre = input("Nombre: ")
+                precio = float(input("Precio: "))
+                stock = int(input("Stock: "))
+                codigo_proveedor = input("Codigo Proveedor: ")
+                nombre_proveedor = input("Nombre Proveedor: ")
+                contacto = input("Contacto: ")
+                
+                oInventario.anadir_producto(Producto(codigo, nombre, precio, stock, Proveedor(codigo_proveedor, nombre_proveedor, contacto)))
+            elif opcion == 2:
+                oInventario.mostrar()
+            elif opcion == 3:
+                codigo = input("Introduzca el codigo a buscar: ")
+                producto = oInventario.buscar(codigo)
+                if producto:
+                    print(producto)
+                else:
+                    print("Producto no encontrado")
+            elif opcion == 4:
+                codigo = input("Codigo: ")
+                nombre = input("Nombre: ")
+                precio = input("Precio: ")
+                stock = input("Stock: ")
+                oInventario.modificar(codigo, nombre, precio, stock)
+            elif opcion == 5:
+                codigo = input("Codigo: ")
+                oInventario.eliminar(codigo)
+            elif opcion == 6:
+                valor = oInventario.valor_total()
+                print(f"El valor del inventario es: {valor}")
+            elif opcion == 7:
+                nombre_proveedor = input("Nombre Proveedor: ")
+                oInventario.mostrar_por_proveedor(nombre_proveedor)
+            elif opcion == 8:
+                oInventario.guardar()
+                break
             else:
-                print("Producto no encontrado")
-        elif opcion == 4:
-            codigo = input("Codigo: ")
-            nombre = input("Nombre: ")
-            precio = input("Precio: ")
-            stock = input("Stock: ")
-        elif opcion == 5:
-            codigo = input("Codigo: ")
-            oInventario.eliminar(codigo)
-        elif opcion == 6:
-            valor = oInventario.valor_total()
-            print(f"El valor del inventario es: {valor}")
-        elif opcion == 7:
-            nombre_proveedor = input("Nombre Proveedor: ")
-            oInventario.mostrar_por_proveedor(nombre_proveedor)
-        elif opcion == 8:
-            oInventario.guardar()
-            break
+                print("Elije un numero entre el 1 y el 8")
+        except:
+            print("Tienes que meter un número")
         # TODO: implementar las acciones correspondientes a cada opción del menú
 
 if __name__ == "__main__":
