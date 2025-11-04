@@ -26,6 +26,7 @@ Opcionalmente podrás realizar la conversión entre los objetos y los datos en f
 
 * Atributos:
 
+  * `codigo` (cadena)
   * `nombre` (cadena)
   * `contacto` (cadena, puede ser correo electrónico o teléfono)
 * Métodos:
